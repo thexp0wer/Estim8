@@ -1,0 +1,17 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "file-saver": "^2.0.5",
+    "handsontable": "^15.3.0",
+    "js-xlsx": "^0.8.22"
+  }
+}

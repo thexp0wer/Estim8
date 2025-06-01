@@ -1,0 +1,92 @@
+                        <!-- Project Documents Information Card -->
+                        <div class="card mt-4" id="documents">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Required Project Documents</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-info">
+                                    <div class="d-flex">
+                                        <div class="me-3">
+                                            <i class="fas fa-info-circle fa-2x"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="alert-heading">Project Documents Uploading</h5>
+                                            <p class="mb-0">
+                                                Required project documents can now be uploaded in a separate form. This helps separate concerns and makes the estimate editing process more focused.
+                                            </p>
+                                            <hr>
+                                            <p class="mb-0">
+                                                <a href="{{ url_for('projects.upload_documents', project_id=project.id) }}" class="btn btn-primary">
+                                                    <i class="fas fa-upload me-2"></i>Go to Document Upload Page
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Document Status -->
+                                <div class="mt-3">
+                                    <h5><i class="fas fa-check-circle text-success me-2"></i>Document Upload Status</h5>
+                                    
+                                    {% set doc_fields = [
+                                        ('func_heads_meeting_mom', 'Functional Heads Meeting MOM'),
+                                        ('bu_approval_to_bid', 'BU Approval to Bid'),
+                                        ('expression_of_needs', 'Expression of Needs Document'),
+                                        ('scope_of_work', 'Scope of Work'),
+                                        ('execution_schedule', 'Schedule of Execution'),
+                                        ('execution_strategy', 'Work Execution Strategy'),
+                                        ('resource_mobilization', 'Resource Mobilization Strategy')
+                                    ] %}
+                                    
+                                    {% set uploaded_count = 0 %}
+                                    {% for field, label in doc_fields %}
+                                        {% set doc_files = project[field]|default('[]')|fromjson %}
+                                        {% if doc_files|length > 0 %}
+                                            {% set uploaded_count = uploaded_count + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    <div class="progress mb-3" style="height: 25px;">
+                                        {% set percentage = (uploaded_count / doc_fields|length) * 100 %}
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%;" aria-valuenow="{{ uploaded_count }}" aria-valuemin="0" aria-valuemax="{{ doc_fields|length }}">
+                                            {{ uploaded_count }} / {{ doc_fields|length }} Documents
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="small text-muted mb-3">
+                                        {% if uploaded_count == doc_fields|length %}
+                                            <span class="text-success"><i class="fas fa-check-circle me-1"></i>All required project documents have been uploaded.</span>
+                                        {% else %}
+                                            <span class="text-warning"><i class="fas fa-exclamation-circle me-1"></i>Please upload all required documents before submitting for validation.</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- List of documents with status -->
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Document</th>
+                                                    <th class="text-center" width="100">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for field, label in doc_fields %}
+                                                    {% set doc_files = project[field]|default('[]')|fromjson %}
+                                                    <tr>
+                                                        <td>{{ label }}</td>
+                                                        <td class="text-center">
+                                                            {% if doc_files|length > 0 %}
+                                                                <span class="badge bg-success"><i class="fas fa-check me-1"></i>Uploaded</span>
+                                                            {% else %}
+                                                                <span class="badge bg-secondary"><i class="fas fa-times me-1"></i>Not Uploaded</span>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
